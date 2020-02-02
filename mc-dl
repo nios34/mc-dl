@@ -1,0 +1,52 @@
+#!/usr/bin/env python
+# -*- config=utf8 -*-
+from libs.Downloader import Downloader
+import argparse
+
+def Download(o, v, p, Want_to_clean):
+    D_class = Downloader(o, v, p)
+
+    print("[1/8] fetch_manifest()")
+    D_class.fetch_manifest()
+    print("[2/8] fetch_data_list()")
+    D_class.fetch_data_list()
+    print("[3/8] read_details()")
+    D_class.read_details()
+    print("[4/8] fetch_client_file()")
+    D_class.fetch_client_file()
+    print("[5/8] fetch_all_libs()")
+    D_class.fetch_all_libs()
+    print("[6/8] fetch_all_libs_natives()")
+    D_class.fetch_all_libs_natives()
+    print("[7/8] fetch_all_res()")
+    D_class.fetch_all_res()
+    print("[8/8] fetch_all_res()")
+    D_class.extract_natives()
+
+    print("[POST STEP] COMPLIE MINECRAFT!")
+    D_class.complie_minecraft()
+
+    if (Want_to_clean == True):
+        D_class.clean()
+        pass
+
+    print("Done.")
+    pass
+
+def main():
+    parser = argparse.ArgumentParser(description="Command-line tools for Minecraft download")
+
+    parser.add_argument('Version', help='the version of the Minecraft you want to download', default='1.15.1')
+    parser.add_argument('-p', '--platform', help='the platform for Minecraft', choices=['linux','windows','osx'], default='linux')
+    parser.add_argument('-o', '--output', help='download to someplace', default='.')
+    parser.add_argument('-nc', '--no-clean', help='don\'t clean after download', action='store_true')
+
+    args = parser.parse_args()
+
+    print(args)
+    Download(args.output, args.Version, args.platform, (not args.no_clean))
+    pass
+
+if __name__ == "__main__":
+    main()
+    pass
